@@ -1,66 +1,72 @@
 import java.util.Scanner;
 
-public class TopTenRunners {
+public class Merge2D {
 
-    static void mergeSort(int[][] a, int left, int right) {
+    // Merge Sort Function
+    public static void mergeSort(int arr[][], int left, int right) {
 
         if (left < right) {
 
             int mid = (left + right) / 2;
 
-            mergeSort(a, left, mid);
-            mergeSort(a, mid + 1, right);
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
 
-            merge(a, left, mid, right);
+            merge(arr, left, mid, right);
         }
     }
 
-    static void merge(int[][] a, int left, int mid, int right) {
+    // Merge Function
+    public static void merge(int arr[][], int left, int mid, int right) {
 
-        int n1 = mid - left + 1;
-        int n2 = right - mid;
+        int temp[][] = new int[right - left + 1][2];
 
-        int[][] L = new int[n1][2];
-        int[][] R = new int[n2][2];
+        int i = left;
+        int j = mid + 1;
+        int k = 0;
 
-        for (int i = 0; i < n1; i++) {
-            L[i][0] = a[left + i][0];
-            L[i][1] = a[left + i][1];
-        }
+        // Compare finishing times
+        while (i <= mid && j <= right) {
 
-        for (int j = 0; j < n2; j++) {
-            R[j][0] = a[mid + 1 + j][0];
-            R[j][1] = a[mid + 1 + j][1];
-        }
+            if (arr[i][0] <= arr[j][0]) {
 
-        int i = 0, j = 0, k = left;
-
-        while (i < n1 && j < n2) {
-
-            if (L[i][0] <= R[j][0]) {
-                a[k][0] = L[i][0];
-                a[k][1] = L[i][1];
+                temp[k][0] = arr[i][0];
+                temp[k][1] = arr[i][1];
                 i++;
+
             } else {
-                a[k][0] = R[j][0];
-                a[k][1] = R[j][1];
+
+                temp[k][0] = arr[j][0];
+                temp[k][1] = arr[j][1];
                 j++;
             }
+
             k++;
         }
 
-        while (i < n1) {
-            a[k][0] = L[i][0];
-            a[k][1] = L[i][1];
+        // Copy remaining left elements
+        while (i <= mid) {
+
+            temp[k][0] = arr[i][0];
+            temp[k][1] = arr[i][1];
             i++;
             k++;
         }
 
-        while (j < n2) {
-            a[k][0] = R[j][0];
-            a[k][1] = R[j][1];
+        // Copy remaining right elements
+        while (j <= right) {
+
+            temp[k][0] = arr[j][0];
+            temp[k][1] = arr[j][1];
             j++;
             k++;
+        }
+
+        // Copy back to original array
+        for (k = 0; k < temp.length; k++) {
+
+            arr[left + k][0] = temp[k][0];
+            arr[left + k][1] = temp[k][1];
         }
     }
 
@@ -68,24 +74,34 @@ public class TopTenRunners {
 
         Scanner sc = new Scanner(System.in);
 
-        int n = sc.nextInt();
+        int N = sc.nextInt();
 
-        int[][] runners = new int[n][2];
+        int arr[][] = new int[N][2];
 
-        
-        for (int i = 0; i < n; i++) {
-            runners[i][0] = sc.nextInt();
-            runners[i][1] = sc.nextInt();
+        // Input finishing time and bib number
+        for (int i = 0; i < N; i++) {
+
+            arr[i][0] = sc.nextInt(); // finishing time
+            arr[i][1] = sc.nextInt(); // bib number
         }
 
-        mergeSort(runners, 0, n - 1);
+        // Sort based on finishing time
+        mergeSort(arr, 0, N - 1);
 
-        
 
-        for (int i = 0; i < Math.min(10, n); i++) {
-            System.out.println(runners[i][0] + " " + runners[i][1]);
+
+        int limit;
+
+        if (N < 10) {
+            limit = N;
+        } else {
+            limit = 10;
         }
 
-        sc.close();
+
+        for (int i = 0; i < limit; i++) {
+
+            System.out.println(arr[i][0] + " " + arr[i][1]);
+        }
     }
 }
