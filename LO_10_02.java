@@ -36,3 +36,5 @@ public class BookLookup {
         sc.close();
     }
 }
+
+//Scanner helps to take the input 
